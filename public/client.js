@@ -29,12 +29,17 @@ padding: 200px 0px;
   color: gray;
   font-size: 0.7em;
 }
+
+& a {
+  color: black;
+}
 `;
 
 const element = xou`<div class="${ inputStyles }">
   <h1>Nouns - A simple word finder</h1>
   <input type="text" placeholder="a word" class="word"><br>
   <span>Press enter to search.</span>
+  <p><b>Nouns</b> is made by <a href="https://twitter.com/tobiasherber_">Tobias Herber</a></p>
 </div>`;
 
 document.body.appendChild(element);
@@ -49,7 +54,7 @@ table {
 }
 
 th, td {
-  padding: 8px;
+  padding: 8px 15px;
   text-align: left;
   border-bottom: 1px solid #ddd;
 }
@@ -66,7 +71,13 @@ document.body.appendChild(results);
 const update = () => {
   nprogress.start();
   
-  fetch(`https://nouns.glitch.me/match?m=` + document.querySelector('.word').value)
+  if (document.querySelector('.word').value.length < 3) {
+    alerted({
+      text: 'Noun will probably find a lot of words matching you selector - rendering them might take some time - Please be patient.'
+    });    
+  }
+  
+  fetch(`/match?m=` + document.querySelector('.word').value)
     .then(function(response) {
       return response.json()
     }).then(function(body) {
@@ -81,6 +92,10 @@ const update = () => {
       xou.update(results, newResult);
     
       nprogress.done();
+    }).catch((err) => {
+      alerted({
+        text: 'An error occured.' + err.message
+      });   
     });
 };
 
