@@ -1,7 +1,6 @@
 # Nouns
 
  > A simple word finder service
- 
  > [nouns.glitch.me](https://nouns.glitch.me/)
  
 ## Running it locally
